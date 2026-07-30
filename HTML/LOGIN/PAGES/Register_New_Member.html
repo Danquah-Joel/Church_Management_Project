@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Member Registration Form</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #003366;
+      --primary-light: #004080;
+      --accent-color: #D4AF37;
+      --gold-dark: #B8860B;
+      --text-dark: #2C3E50;
+      --text-light: #F8FAFC;
+      --white: #ffffff;
+      --gray-100: #f8fafc;
+      --gray-200: #e2e8f0;
+      --gray-400: #64748b;
+      --gray-600: #475569;
+      --red: #ef4444;
+      --success: #10b981;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 35px rgba(0, 0, 0, 0.15);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-image: url('image/gold.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      background-color: #f8fafc;
+      min-height: 100vh;
+      padding: 32px 16px 48px;
+      position: relative;
+    }
+
+    .watermark-logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.35;
+    }
+
+    .watermark-logo img {
+      width: 400px;
+      height: auto;
+      filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.2));
+    }
+
+    .page-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--primary-color);
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .back-link:hover {
+      background: var(--primary-color);
+      color: var(--text-light);
+      transform: translateY(-2px);
+    }
+
+    /* Header */
+    .form-header {
+      text-align: center;
+      margin-bottom: 28px;
+      padding: 28px 24px;
+      background: rgba(248, 250, 252, 0.75);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border-top: 5px solid var(--accent-color);
+    }
+    .form-header .cross-icon {
+      font-size: 28px;
+      color: var(--accent-color);
+      display: block;
+      margin-bottom: 8px;
+    }
+    .form-header h1 {
+      font-size: 1.85rem;
+      letter-spacing: 0.02em;
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+    .form-header p {
+      font-size: 0.93rem;
+      color: var(--gray-600);
+      margin-top: 6px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .section-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: var(--white);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-header .dot {
+      width: 10px; height: 10px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .section-body {
+      padding: 24px 28px 28px;
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    /* Grid */
+    .fields-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px 18px;
+    }
+    .fields-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .fields-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+
+    @media (max-width: 760px) {
+      .fields-grid, .fields-grid.cols-2, .fields-grid.cols-3 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 480px) {
+      .fields-grid, .fields-grid.cols-2, .fields-grid.cols-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Field */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .field.span-2 { grid-column: span 2; }
+    .field.span-4 { grid-column: span 4; }
+
+    label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    label .req { color: var(--red); margin-left: 2px; }
+
+    input, select {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 9px 13px;
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    input::placeholder { color: var(--gray-400); font-size: 0.85rem; }
+    input:focus, select:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    }
+    select { cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23003366' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 13px center;
+      padding-right: 36px;
+    }
+
+    /* Divider label */
+    .sub-title {
+      font-size: 0.95rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      padding: 16px 0 8px;
+      border-bottom: 2px solid var(--accent-color);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Family members section */
+    .family-section {
+      margin-top: 28px;
+    }
+
+    .family-member-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.5fr auto;
+      gap: 12px;
+      align-items: end;
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      animation: slideIn 0.25s ease;
+    }
+    .family-member-row:hover {
+      border-color: var(--accent-color);
+      box-shadow: 0 2px 10px rgba(212, 175, 55, 0.15);
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .family-member-row { grid-template-columns: 1fr 1fr; }
+      .family-member-row .remove-btn { grid-column: span 2; }
+    }
+
+    .remove-btn {
+      background: none;
+      border: 1.5px solid #e0d5c5;
+      color: var(--red);
+      border-radius: var(--radius-sm);
+      width: 36px; height: 36px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.18s, border-color 0.18s;
+      align-self: flex-end;
+    }
+    .remove-btn:hover { background: #fdecea; border-color: var(--red); }
+
+    .add-member-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 2px dashed var(--accent-color);
+      color: var(--primary-color);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.18s, color 0.18s;
+      letter-spacing: 0.03em;
+    }
+    .add-member-btn:hover {
+      background: var(--accent-color);
+      color: var(--white);
+    }
+    .add-member-btn span.plus {
+      font-size: 1.2rem;
+      font-weight: 400;
+    }
+
+    /* Submit */
+    .submit-wrapper {
+      padding: 24px 28px;
+      background: var(--white);
+      border-top: 2px solid var(--gray-200);
+      display: flex;
+      justify-content: flex-end;
+      gap: 14px;
+      border-radius: 0 0 16px 16px;
+    }
+    .btn-reset {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 500;
+      padding: 12px 28px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 2px solid var(--primary-color);
+      background: var(--white);
+      color: var(--primary-color);
+      transition: var(--transition);
+    }
+    .btn-reset:hover {
+      background: var(--primary-color);
+      color: var(--white);
+    }
+
+    .btn-submit {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 12px 36px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: none;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+      color: var(--white);
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(0, 51, 102, 0.2);
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 51, 102, 0.3);
+    }
+    .btn-submit:active { transform: scale(0.98); }
+    .btn-submit svg { width: 16px; height: 16px; }
+
+    /* Counter badge */
+    .member-count-badge {
+      background: var(--accent-color);
+      color: var(--primary-color);
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 20px;
+      padding: 2px 9px;
+      margin-left: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--gray-400);
+      font-size: 0.88rem;
+      padding: 20px 0 8px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<div class="watermark-logo" aria-hidden="true">
+  <img src="image/chr_logo.png" alt="">
+</div>
+
+<div class="page-wrapper">
+  <div class="top-bar">
+    <a href="Home_Page.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
+  </div>
+
+  <div class="form-header">
+    <span class="cross-icon">✝</span>
+    <h1>Member Registration Form</h1>
+    <p>Please fill in all required fields carefully</p>
+  </div>
+
+  <form id="regForm" method="POST" action="save_member.php">
+
+    <!-- PERSONAL DETAILS -->
+    <div class="card">
+      <div class="section-header">
+        <div class="dot"></div>
+        <h2>Personal Details</h2>
+      </div>
+      <div class="section-body">
+        <div class="fields-grid">
+          <div class="field">
+            <label>Position <span class="req">*</span></label>
+            <select name="position" required>
+              <option value="">— Select —</option>
+              <option>APOSTLE</option><option>PASTOR</option><option>ELDER</option>
+              <option>DEACON</option><option>DEACONNESS</option><option>BROTHER</option>
+              <option>SISTER</option><option>Mr.</option><option>Mrs</option><option>Miss</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" name="first_name" placeholder="First name" required>
+          </div>
+          <div class="field">
+            <label>Middle Name</label>
+            <input type="text" name="middle_name" placeholder="Middle name">
+          </div>
+          <div class="field">
+            <label>Surname <span class="req">*</span></label>
+            <input type="text" name="surname" placeholder="Surname" required>
+          </div>
+
+          <div class="field">
+            <label>Phone No. 1 <span class="req">*</span></label>
+            <input type="tel" name="phone1" placeholder="e.g. 024 000 0000" required>
+          </div>
+          <div class="field">
+            <label>Phone No. 2</label>
+            <input type="tel" name="phone2" placeholder="e.g. 054 000 0000">
+          </div>
+          <div class="field">
+            <label>Emergency Contact <span class="req">*</span></label>
+            <input type="tel" name="emergency" placeholder="Emergency number" required>
+          </div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" name="email" placeholder="example@email.com">
+          </div>
+
+          <div class="field">
+            <label>Date of Birth <span class="req">*</span></label>
+            <input type="date" name="dob" required>
+          </div>
+          <div class="field">
+            <label>Age</label>
+            <input type="number" id="computedAge" placeholder="Auto-calculated from DOB" min="1" max="120" readonly disabled>
+          </div>
+          <div class="field">
+            <label>Gender <span class="req">*</span></label>
+            <select name="gender" required>
+              <option value="">— Select —</option>
+              <option>Male</option><option>Female</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Hometown <span class="req">*</span></label>
+            <input type="text" name="hometown" placeholder="Your hometown" required>
+          </div>
+
+          <div class="field">
+            <label>Nationality <span class="req">*</span></label>
+            <input type="text" name="nationality" placeholder="Nationality" required>
+          </div>
+          <div class="field">
+            <label>Occupation <span class="req">*</span></label>
+            <input type="text" name="occupation" placeholder="Occupation" required>
+          </div>
+          <div class="field">
+            <label>Marital Status</label>
+            <select name="marital_status">
+              <option value="">— Select —</option>
+              <option>Married</option><option>Single</option><option>Widowed</option><option>Divorced</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Residential Address <span class="req">*</span></label>
+            <input type="text" name="address" placeholder="Your address" required>
+          </div>
+          <div class="field">
+            <label>Town / City of Residence <span class="req">*</span></label>
+            <input type="text" name="location" placeholder="e.g. Kumasi, Accra, Takoradi" required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARENTS -->
+    <div class="card">
+      <div class="section-header">
+        <div class="dot"></div>
+        <h2>Parents Information</h2>
+      </div>
+      <div class="section-body">
+        <div class="fields-grid cols-2">
+          <div class="field">
+            <label>Mother's Full Name</label>
+            <input type="text" name="mother_name" placeholder="Mother's full name">
+          </div>
+          <div class="field">
+            <label>Mother's Status</label>
+            <select name="mother_status">
+              <option value="">— Select —</option>
+              <option>ALIVE</option><option>DECEASED</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Father's Full Name</label>
+            <input type="text" name="father_name" placeholder="Father's full name">
+          </div>
+          <div class="field">
+            <label>Father's Status</label>
+            <select name="father_status">
+              <option value="">— Select —</option>
+              <option>ALIVE</option><option>DECEASED</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHURCH INFO -->
+    <div class="card">
+      <div class="section-header">
+        <div class="dot"></div>
+        <h2>Church Information</h2>
+      </div>
+      <div class="section-body">
+        <div class="fields-grid">
+          <div class="field">
+            <label>Water Baptised?</label>
+            <select name="water_baptised">
+              <option value="">— Select —</option>
+              <option>YES</option><option>NO</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Date of Water Baptism</label>
+            <input type="date" name="water_baptism_date">
+          </div>
+          <div class="field">
+            <label>Holy Spirit Baptised?</label>
+            <select name="holyspirit_baptised">
+              <option value="">— Select —</option>
+              <option>YES</option><option>NO</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Current Ministry</label>
+            <select name="ministry">
+              <option value="">— Select —</option>
+              <option>WOMEN</option><option>MENS</option><option>YOUTH</option>
+              <option>EVANGELISM</option><option>CHILDREN</option><option>HUM</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Status</label>
+            <select name="status">
+              <option value="">— Select —</option>
+              <option>Pastor</option>
+              <option>Deacon</option>
+              <option>Deaconess</option>
+              <option>Elder</option>
+              <option>Youth</option>
+              <option>Youth Leader</option>
+              <option>Chairman</option>
+              <option>New Convert</option>
+            </select>
+          </div>
+
+          <div class="field span-2">
+            <label>Location Group / Zone</label>
+            <select name="zone">
+              <option value="">— Select —</option>
+              <option>ANWIAM</option><option>AFFUL NKWANTA</option><option>AMAKOM</option>
+              <option>ST PAULS</option><option>OFORIKROM</option><option>SOBOLO</option>
+              <option>EXTERNAL ONE</option><option>EXTERNAL TWO</option><option>EXTERNAL THREE</option>
+              <option>EXTERNAL FOUR</option><option>EXTERNAL FIVE</option>
+            </select>
+          </div>
+          <div class="field span-2">
+            <label>GPS Address</label>
+            <input type="text" name="gps" placeholder="e.g. GH-123-4567">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAMILY INFO -->
+    <div class="card">
+      <div class="section-header">
+        <div class="dot"></div>
+        <h2>Family Information</h2>
+      </div>
+      <div class="section-body">
+
+        <!-- Spouse -->
+        <div class="sub-title">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Spouse Details
+        </div>
+        <div class="fields-grid">
+          <div class="field span-2">
+            <label>Spouse Full Name</label>
+            <input type="text" name="spouse_name" placeholder="Spouse's full name">
+          </div>
+          <div class="field">
+            <label>Spouse Phone No.</label>
+            <input type="tel" name="spouse_phone" placeholder="Spouse's phone">
+          </div>
+          <div class="field">
+            <label>Spouse Occupation</label>
+            <input type="text" name="spouse_occupation" placeholder="Spouse's occupation">
+          </div>
+          <div class="field span-2">
+            <label>Hometown of Spouse</label>
+            <input type="text" name="spouse_hometown" placeholder="Spouse's hometown">
+          </div>
+          <div class="field">
+            <label>Spouse's Religion</label>
+            <select name="spouse_religion">
+              <option value="">— Select —</option>
+              <option>CHRISTIAN</option><option>MUSLIM</option><option>TRADITIONALIST</option><option>OTHER</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Place of Worship</label>
+            <input type="text" name="place_of_worship" placeholder="Church / Mosque name">
+          </div>
+        </div>
+
+        <!-- Family Members Dynamic -->
+        <div class="sub-title" style="margin-top:24px;">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          Family Members
+          <span class="member-count-badge" id="memberCount">0</span>
+        </div>
+
+        <div id="familyMembersContainer">
+          <div class="empty-state" id="emptyState">No family members added yet. Click the button below to add one.</div>
+        </div>
+
+        <button type="button" class="add-member-btn" onclick="addFamilyMember()">
+          <span class="plus">+</span> Add Family Member
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-wrapper">
+      <button type="reset" class="btn-reset" onclick="resetForm()">Clear Form</button>
+      <button type="submit" class="btn-submit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Submit Registration
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  // Auth guard — uses the real server session (sessionStorage.isLoggedIn was
+  // never set anywhere in this app, so checking it here was always false/meaningless).
+  (async function checkAuth() {
+      try {
+          const res  = await fetch('check_session.php');
+          const data = await res.json();
+          if (!data.logged_in) {
+              window.location.href = 'Login.html';
+          }
+      } catch {
+          console.warn('Auth check skipped — check_session.php not reachable.');
+      }
+  })();
+
+  let memberIndex = 0;
+
+
+  function addFamilyMember() {
+    const container = document.getElementById('familyMembersContainer');
+    const emptyState = document.getElementById('emptyState');
+    if (emptyState) emptyState.remove();
+
+    const idx = memberIndex++;
+    const row = document.createElement('div');
+    row.className = 'family-member-row';
+    row.id = `member-${idx}`;
+    row.innerHTML = `
+      <div class="field">
+        <label>Full Name <span class="req">*</span></label>
+        <input type="text" name="family_name[]" placeholder="Full name" required>
+      </div>
+      <div class="field">
+        <label>Age</label>
+        <input type="number" name="family_age[]" placeholder="Age" min="0" max="120">
+      </div>
+      <div class="field">
+        <label>Relationship <span class="req">*</span></label>
+        <select name="family_relation[]" required>
+          <option value="">— Select —</option>
+          <option>Spouse</option>
+          <option>Child</option>
+          <option>Grandchild</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <button type="button" class="remove-btn" onclick="removeMember(${idx})" title="Remove">&#10005;</button>
+    `;
+    container.appendChild(row);
+    updateCount();
+  }
+
+  function removeMember(idx) {
+    const row = document.getElementById(`member-${idx}`);
+    if (row) {
+      row.style.opacity = '0';
+      row.style.transform = 'translateY(-6px)';
+      row.style.transition = 'opacity 0.2s, transform 0.2s';
+      setTimeout(() => {
+        row.remove();
+        updateCount();
+        const container = document.getElementById('familyMembersContainer');
+        if (container.children.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'empty-state';
+          empty.id = 'emptyState';
+          empty.textContent = 'No family members added yet. Click the button below to add one.';
+          container.appendChild(empty);
+        }
+      }, 200);
+    }
+  }
+
+
+  function updateCount() {
+    const rows = document.querySelectorAll('.family-member-row');
+    document.getElementById('memberCount').textContent = rows.length;
+  }
+
+
+  function resetForm() {
+    const container = document.getElementById('familyMembersContainer');
+    container.innerHTML = `<div class="empty-state" id="emptyState">No family members added yet. Click the button below to add one.</div>`;
+    memberIndex = 0;
+    updateCount();
+  }
+
+  document.getElementById('regForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const submitBtn = document.querySelector('.btn-submit');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML='Submitting…';
+
+    try {
+      const formData = new FormData(this);
+
+      const response = await fetch('save_member.php', {
+        method: 'POST',
+        body: formData
+      });
+
+      const raw = await response.text();
+      let result;
+      try {
+        result = JSON.parse(raw);
+      } catch (parseErr) {
+        console.error('Invalid JSON from server:', raw);
+        throw new Error('Invalid server response');
+      }
+
+      if (result.success) {
+        alert('Registration submitted successfully! Member ID: ' + result.member_id);
+        window.location.href = 'Home_Page.html';
+      } else {
+        // Show validation errors or server message
+        const msg = result.errors
+          ? result.errors.join('\n')
+          : result.message || 'Submission failed. Please try again.';
+        alert('Error:\n' + msg);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 2 15 22 11 13 2 9 22 2"/></svg> Submit Registration';
+      }
+    } catch (err) {
+      alert('Network error. Please check your connection and try again.');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 2 15 22 11 13 2 9 22 2"/></svg> Submit Registration';
+    }
+  });
+
+  // Auto-calculate age from DOB
+  document.querySelector('[name="dob"]').addEventListener('change', function() {
+    const dob = new Date(this.value);
+    if (!isNaN(dob)) {
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+      document.getElementById('computedAge').value = age;
+    }
+  });
+</script>
+</body>
+</html>

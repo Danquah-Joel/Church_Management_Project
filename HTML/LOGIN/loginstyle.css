@@ -1,0 +1,865 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* ─── CSS Custom Properties ─────────────────────────────────────────────── */
+:root {
+    --primary-color: #002B5B;
+    --primary-light: #003D7A;
+    --accent-color: #D4AF37;
+    --gold-dark: #B8860B;
+    --gold-light: rgba(218, 165, 32, 0.95);
+    --text-dark: #2C3E50;
+    --text-light: #F8FAFC;
+    --soft-gray: #E5E9F0;
+    --shadow-md: 0 8px 25px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 12px 35px rgba(0, 0, 0, 0.2);
+
+    /* New tokens for enhancements */
+    --glass-bg: rgba(255, 255, 255, 0.82);
+    --glass-border: rgba(212, 175, 55, 0.45);
+    --glow-gold: rgba(212, 175, 55, 0.35);
+    --glow-blue: rgba(0, 43, 91, 0.30);
+    --transition-fast: 0.3s ease;
+    --transition-med: 0.5s ease;
+    --transition-slow: 0.7s ease;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ─── Body ───────────────────────────────────────────────────────────────── */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--primary-color); /* fallback while gold.png loads */
+    /* Main page background image */
+    background-image: url('image/gold.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Dark overlay for readability over background image */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 17, 41, 0.55) 0%,
+        rgba(0, 25, 56, 0.65) 50%,
+        rgba(0, 12, 30, 0.7) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Subtle shimmer overlay on the body for depth */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(
+        ellipse at 60% 40%,
+        rgba(212, 175, 55, 0.08) 0%,
+        rgba(0, 51, 102, 0.12) 60%,
+        transparent 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+    animation: ambientPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes ambientPulse {
+    from { opacity: 0.6; }
+    to   { opacity: 1; }
+}
+
+/* ─── Vignette ───────────────────────────────────────────────────────────── */
+.vignette {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 55%,
+        rgba(0, 12, 30, 0.55) 100%
+    );
+}
+
+/* ─── Ambient FX: golden light rays + floating particles ────────────────── */
+.ambient-fx {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.ambient-fx .ray {
+    position: absolute;
+    top: -20%;
+    width: 2px;
+    height: 140%;
+    background: linear-gradient(
+        180deg,
+        rgba(212, 175, 55, 0) 0%,
+        rgba(212, 175, 55, 0.18) 50%,
+        rgba(212, 175, 55, 0) 100%
+    );
+    filter: blur(2px);
+    transform-origin: top center;
+    animation: raySway 14s ease-in-out infinite alternate;
+}
+
+.ambient-fx .ray1 { left: 8%;  width: 3px; animation-duration: 16s; }
+.ambient-fx .ray2 { left: 50%; width: 2px; animation-duration: 20s; animation-delay: -4s; }
+.ambient-fx .ray3 { left: 88%; width: 3px; animation-duration: 18s; animation-delay: -8s; }
+
+@keyframes raySway {
+    from { transform: rotate(-4deg); opacity: 0.5; }
+    to   { transform: rotate(4deg);  opacity: 0.9; }
+}
+
+.ambient-fx .particle {
+    position: absolute;
+    bottom: -10px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.95) 0%, rgba(212, 175, 55, 0) 70%);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+    animation: floatUp linear infinite;
+}
+
+.ambient-fx .p1 { left: 10%;  width: 5px; height: 5px;  animation-duration: 22s; animation-delay: 0s;  }
+.ambient-fx .p2 { left: 25%;  width: 8px; height: 8px;  animation-duration: 28s; animation-delay: -6s; }
+.ambient-fx .p3 { left: 45%;  width: 4px; height: 4px;  animation-duration: 18s; animation-delay: -3s; }
+.ambient-fx .p4 { left: 65%;  width: 6px; height: 6px;  animation-duration: 24s; animation-delay: -12s;}
+.ambient-fx .p5 { left: 80%;  width: 5px; height: 5px;  animation-duration: 20s; animation-delay: -9s; }
+.ambient-fx .p6 { left: 92%;  width: 7px; height: 7px;  animation-duration: 26s; animation-delay: -15s;}
+
+@keyframes floatUp {
+    0%   { transform: translateY(0) translateX(0) scale(1);    opacity: 0; }
+    10%  { opacity: 0.8; }
+    50%  { transform: translateY(-50vh) translateX(20px) scale(1.2); opacity: 0.7; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-105vh) translateX(-15px) scale(0.8); opacity: 0; }
+}
+
+/* ─── Site Logo (top-left corner) ───────────────────────────────────────── */
+.site-logo {
+    position: fixed;
+    top: 22px;
+    left: 22px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.site-logo img {
+    display: block;
+    width: 200px;
+    height: auto;
+    /* NEW: subtle lift so the logo reads clearly against the gold background */
+    filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.35));
+}
+
+/* ─── Wrapper ────────────────────────────────────────────────────────────── */
+.wrapper {
+    position: relative;
+    width: 750px;
+    height: 450px;
+    /* FIX: was `background: transparent` — added glass-morphism so form text is readable */
+    background: var(--glass-bg);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    border: 2px solid var(--glass-border);
+    box-shadow:
+        var(--shadow-lg),
+        0 0 30px var(--glow-gold),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+    z-index: 2;
+    border-radius: 16px;
+    /* NEW: gentle entrance animation */
+    animation: wrapperEnter 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes wrapperEnter {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ─── Form Box (shared) ──────────────────────────────────────────────────── */
+.wrapper .form-box {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* FIX: add z-index so forms always render above bg-animate spans */
+    z-index: 2;
+}
+
+/* ─── Form Box: Login ────────────────────────────────────────────────────── */
+.wrapper .form-box.login {
+    left: 0;
+    padding: 0 40px 0 60px;
+}
+
+.wrapper .form-box.login .animation {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition: var(--transition-slow);
+    transition-delay: calc(0.1s * var(--j));
+}
+
+.wrapper.active .form-box.login .animation {
+    transform: translateX(-120%);
+    opacity: 0;
+    filter: blur(10px);
+    transition-delay: calc(0.1s * var(--i));
+}
+
+/* ─── Form Box: Register ─────────────────────────────────────────────────── */
+.wrapper .form-box.register {
+    right: 0;
+    padding: 0 40px 0 60px;
+    pointer-events: none;
+}
+
+.wrapper.active .form-box.register {
+    pointer-events: auto;
+}
+
+.wrapper .form-box.register .animation {
+    transform: translateX(120%);
+    opacity: 0;
+    filter: blur(10px);
+    transition: var(--transition-slow);
+    transition-delay: calc(0.1s * var(--j));
+}
+
+.wrapper.active .form-box.register .animation {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition-delay: calc(0.1s * var(--i));
+}
+
+/* ─── Form Heading ───────────────────────────────────────────────────────── */
+.form-box h2 {
+    font-size: 32px;
+    color: var(--primary-color);
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    /* NEW: gold underline accent */
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.form-box h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-color), var(--gold-dark));
+    border-radius: 2px;
+    transition: width var(--transition-med);
+}
+
+/* FIX: removed a rule here that re-set width: 48px on the underline —
+   identical to the base .form-box h2::after value above, so it had no
+   visual effect. Looked like a leftover from an earlier version where
+   the underline started collapsed and animated open. */
+
+/* ─── Input Box ──────────────────────────────────────────────────────────── */
+.form-box .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    /* FIX: was 25px top+bottom — kept at 25px but confirmed no overflow on 450px wrapper */
+    margin: 22px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid var(--text-dark);
+    padding-right: 28px;
+    font-size: 16px;
+    color: var(--text-dark);
+    font-weight: 500;
+    transition: border-color var(--transition-med), box-shadow var(--transition-med);
+}
+
+.input-box input:focus,
+.input-box input:valid {
+    border-bottom-color: var(--accent-color);
+    /* NEW: soft glow under the focused field */
+    box-shadow: 0 2px 8px -2px var(--glow-gold);
+}
+
+/* FIX: proper :focus-visible ring for keyboard users */
+.input-box input:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 15px;
+    color: #64748b;
+    pointer-events: none;
+    transition: top var(--transition-med), color var(--transition-med), font-size var(--transition-med);
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+    top: -5px;
+    font-size: 12px;
+    color: var(--accent-color);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.input-box i {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--primary-color);
+    transition: color var(--transition-med), transform var(--transition-fast);
+}
+
+.input-box input:focus ~ i,
+.input-box input:valid ~ i {
+    color: var(--accent-color);
+    /* NEW: icon pops slightly on focus */
+    transform: translateY(-50%) scale(1.15);
+}
+
+/* ─── Button ─────────────────────────────────────────────────────────────── */
+.btn {
+    position: relative;
+    width: 100%;
+    height: 45px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    z-index: 1;
+    overflow: hidden;
+    box-shadow: 0 4px 15px var(--glow-blue);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Gold sweep on hover */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    background: linear-gradient(135deg, var(--gold-light), var(--accent-color), var(--gold-dark));
+    z-index: -1;
+    transition: top 0.5s ease;
+}
+
+.btn:hover::before {
+    top: 0;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px var(--glow-blue);
+}
+
+/* NEW: ripple-like press effect */
+.btn:active {
+    transform: translateY(0px) scale(0.98);
+    box-shadow: 0 2px 8px var(--glow-blue);
+}
+
+/* FIX: visible focus ring for keyboard nav */
+.btn:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 3px;
+}
+
+/* ─── Logred Link ────────────────────────────────────────────────────────── */
+.form-box .logred-link {
+    font-size: 13px;
+    color: var(--text-dark);
+    text-align: center;
+    /* FIX: was margin: 20px 0 10px — tightened to fit wrapper height */
+    margin: 14px 0 4px;
+}
+
+.logred-link p a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 4px;
+    position: relative;
+    /* NEW: animated underline on hover */
+    transition: color var(--transition-fast);
+}
+
+.logred-link p a::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent-color);
+    border-radius: 1px;
+    transition: width var(--transition-fast);
+}
+
+.logred-link p a:hover {
+    color: var(--accent-color);
+}
+
+.logred-link p a:hover::after {
+    width: 100%;
+}
+
+/* ─── Info Text (shared) ─────────────────────────────────────────────────── */
+.wrapper .info-text {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+}
+
+/* FIX: removed asymmetric 60px bottom padding that caused vertical misalignment */
+.wrapper .info-text.login {
+    right: 0;
+    text-align: right;
+    padding: 0 40px 0 80px;
+}
+
+.wrapper .info-text.login .animation {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition: var(--transition-slow);
+    transition-delay: calc(0.1s * var(--j));
+}
+
+.wrapper.active .info-text.login .animation {
+    transform: translateX(120%);
+    opacity: 0;
+    filter: blur(10px);
+    transition-delay: calc(0.1s * var(--i));
+}
+
+.wrapper .info-text.register {
+    left: 0;
+    text-align: left;
+    padding: 0 80px 0 40px;
+    pointer-events: none;
+}
+
+.wrapper.active .info-text.register {
+    pointer-events: auto;
+}
+
+.wrapper .info-text.register .animation {
+    transform: translateX(-120%);
+    opacity: 0;
+    filter: blur(10px);
+    transition: var(--transition-slow);
+    transition-delay: calc(0.1s * var(--j));
+}
+
+.wrapper.active .info-text.register .animation {
+    transform: translateX(0);
+    opacity: 1;
+    filter: blur(0);
+    transition-delay: calc(0.1s * var(--i));
+}
+
+/* ─── Info Text Typography ───────────────────────────────────────────────── */
+.info-text h2 {
+    font-size: 28px;
+    color: #fff;
+    line-height: 1.3;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    /* NEW: gold bottom border accent */
+    border-bottom: 2px solid rgba(212, 175, 55, 0.6);
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+
+.info-text p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.92);
+    line-height: 1.6;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    font-weight: 300;
+}
+
+/* ─── Background Animated Panels ─────────────────────────────────────────── */
+/* FIX: added explicit z-index: 1 so panels sit behind form content (z-index: 2) */
+.wrapper .bg-animate {
+    position: absolute;
+    top: -4px;
+    right: 0;
+    width: 850px;
+    height: 600px;
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light), var(--accent-color));
+    border-bottom: 3px solid var(--accent-color);
+    transform: rotate(10deg) skewY(40deg);
+    transform-origin: bottom right;
+    transition: transform 1.5s ease;
+    transition-delay: 1.6s;
+    z-index: 1;
+    /* NEW: subtle shimmer on the blue panel */
+    box-shadow: inset 0 0 60px rgba(212, 175, 55, 0.1);
+}
+
+.wrapper.active .bg-animate {
+    transform: rotate(0deg) skewY(0deg);
+    transition-delay: 0.5s;
+}
+
+.wrapper .bg-animate2 {
+    position: absolute;
+    top: 100%;
+    left: 250px;
+    width: 850px;
+    height: 700px;
+    background: linear-gradient(180deg, var(--gold-light) 0%, var(--accent-color) 50%, var(--gold-dark) 100%);
+    border-top: 3px solid var(--accent-color);
+    transform: rotate(0deg) skewY(0deg);
+    transform-origin: bottom left;
+    transition: transform 1.5s ease;
+    transition-delay: 0.5s;
+    z-index: 1;
+    /* NEW: shimmer layer */
+    box-shadow: inset 0 0 60px rgba(255, 255, 255, 0.15);
+}
+
+.wrapper.active .bg-animate2 {
+    transform: rotate(-11deg) skewY(-41deg);
+    transition-delay: 1.2s;
+}
+
+/* ─── Reduced Motion ─────────────────────────────────────────────────────── */
+/* FIX: was missing — respects OS preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px 0;
+        overflow-y: auto;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .wrapper {
+        width: 95%;
+        max-width: 400px;
+        height: auto;
+        min-height: 500px;
+        /* FIX: switch to normal flow so form-box children stack vertically */
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* FIX: bg-animate panels are positioned absolutely inside a fixed-height
+       wrapper — on mobile they overflow and obscure the form. Hide them. */
+    .wrapper .bg-animate,
+    .wrapper .bg-animate2 {
+        display: none;
+    }
+
+    .wrapper .form-box,
+    .wrapper .info-text {
+        position: relative;
+        width: 100%;
+        padding: 30px 25px;
+    }
+
+    /* FIX: form-box.register was pointer-events:none when inactive —
+       reset for mobile since there is no slide animation */
+    .wrapper .form-box.register {
+        pointer-events: auto;
+    }
+
+    /* On mobile, show only the active panel (login by default, register when .active) */
+    .wrapper .form-box.login,
+    .wrapper .form-box.register {
+        display: none;
+    }
+
+    .wrapper .form-box.login {
+        display: flex; /* shown by default */
+    }
+
+    .wrapper.active .form-box.login {
+        display: none;
+    }
+
+    .wrapper.active .form-box.register {
+        display: flex;
+    }
+
+    /* Info panels are unnecessary on small screens */
+    .wrapper .info-text.login,
+    .wrapper .info-text.register {
+        display: none;
+    }
+
+    .site-logo {
+        top: 14px;
+        left: 14px;
+    }
+
+    .site-logo img {
+        width: 50px;
+    }
+
+    /* Tighten input margins on mobile */
+    .form-box .input-box {
+        margin: 18px 0;
+    }
+}
+
+/* FIX: removed an empty @media (max-width: 1100px) and (min-width: 769px)
+   block that had no rules inside it — pure dead weight. If a tablet
+   breakpoint is needed later, add the rules here. */
+
+/* ─── Admin Activation Modal ─────────────────────────────────────────────── */
+.admin-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 12, 30, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+.admin-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.admin-modal {
+    background: var(--glass-bg);
+    backdrop-filter: blur(18px) saturate(1.5);
+    -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    border: 2px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 36px 40px 32px;
+    width: 360px;
+    max-width: 92vw;
+    text-align: center;
+    box-shadow:
+        var(--shadow-lg),
+        0 0 40px var(--glow-gold),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+    transform: translateY(24px) scale(0.97);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.admin-overlay.active .admin-modal {
+    transform: translateY(0) scale(1);
+}
+
+/* Shield icon */
+.admin-modal__icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 0 20px var(--glow-gold);
+}
+
+.admin-modal__icon i {
+    font-size: 30px;
+    color: var(--accent-color);
+}
+
+.admin-modal h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.admin-modal > p {
+    font-size: 13px;
+    color: var(--text-dark);
+    opacity: 0.78;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+/* Five digit boxes */
+.admin-code-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.admin-digit {
+    width: 46px;
+    height: 56px;
+    border: 2px solid var(--glass-border);
+    border-radius: 10px;
+    background: rgba(255,255,255,0.75);
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--primary-color);
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    letter-spacing: 0;
+}
+
+.admin-digit:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px var(--glow-gold);
+    background: #fff;
+}
+
+/* Error text */
+.admin-error {
+    font-size: 12.5px;
+    color: #dc2626;
+    min-height: 18px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+/* Buttons row */
+.admin-modal__actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.admin-btn {
+    flex: 1;
+    padding: 11px 0;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.admin-btn--cancel {
+    background: var(--soft-gray);
+    color: var(--text-dark);
+}
+
+.admin-btn--cancel:hover {
+    background: #d1d5db;
+    transform: translateY(-1px);
+}
+
+.admin-btn--confirm {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: #fff;
+    box-shadow: 0 4px 14px var(--glow-blue);
+}
+
+.admin-btn--confirm:hover {
+    background: linear-gradient(135deg, var(--primary-light), var(--accent-color));
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px var(--glow-gold);
+}
+
+/* Shake animation on wrong code */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-8px); }
+    40%       { transform: translateX(8px); }
+    60%       { transform: translateX(-5px); }
+    80%       { transform: translateX(5px); }
+}
+
+.admin-modal.shake {
+    animation: shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Success flash */
+.admin-overlay.success .admin-modal {
+    border-color: #16a34a;
+    box-shadow: var(--shadow-lg), 0 0 40px rgba(22, 163, 74, 0.35);
+}
+
+.admin-overlay.success .admin-modal__icon {
+    background: linear-gradient(135deg, #15803d, #16a34a);
+}

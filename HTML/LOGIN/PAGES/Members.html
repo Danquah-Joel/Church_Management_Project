@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Members Record List</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #8b5cf6;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --light: #f8fafc;
+    --dark: #1e293b;
+    --gray: #64748b;
+    --border-light: #e2e8f0;
+
+    /* Premium church-dashboard palette */
+    --gold: #d4af37;
+    --gold-deep: #b8860b;
+    --gold-light: #f4e4ba;
+    --navy: #1a2540;
+    --navy-deep: #0f1729;
+    --royal-purple: #6d4fc2;
+    --glass-bg: rgba(255, 255, 255, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.35);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+/* SCROLLBAR */
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(212, 175, 55, 0.08);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--gold) 0%, var(--royal-purple) 100%);
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--gold-deep) 0%, var(--primary-dark) 100%);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) rgba(212, 175, 55, 0.08);
+}
+
+/* LOGO OVERLAY */
+
+.logo-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.logo-overlay img {
+    width: 300px;
+    height: auto;
+    opacity: 0.15;
+    filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.2));
+}
+
+body {
+    background-image:
+        radial-gradient(circle at 15% 20%, rgba(109, 79, 194, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 85% 15%, rgba(212, 175, 55, 0.18) 0%, transparent 50%),
+        radial-gradient(circle at 50% 90%, rgba(26, 37, 64, 0.14) 0%, transparent 55%),
+        url('image/gold.png');
+    background-size: cover, cover, cover, cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #f8fafc57;
+    min-height: 100vh;
+    opacity: 1;
+    position: relative;
+    animation: ambientShift 30s ease-in-out infinite alternate;
+}
+
+@keyframes ambientShift {
+    0% {
+        background-position: center, center, center, center;
+        filter: hue-rotate(0deg);
+    }
+    50% {
+        background-position: 55% 45%, 45% 55%, 50% 40%, center;
+        filter: hue-rotate(4deg);
+    }
+    100% {
+        background-position: center, center, center, center;
+        filter: hue-rotate(0deg);
+    }
+}
+
+/* FLOATING BACKDROP ORBS (CSS-only particles) */
+
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(60px);
+}
+
+body::before {
+    width: 380px;
+    height: 380px;
+    top: -120px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.35) 0%, rgba(212, 175, 55, 0) 70%);
+    animation: floatOrb1 22s ease-in-out infinite;
+}
+
+body::after {
+    width: 460px;
+    height: 460px;
+    bottom: -160px;
+    left: -120px;
+    background: radial-gradient(circle, rgba(109, 79, 194, 0.30) 0%, rgba(109, 79, 194, 0) 70%);
+    animation: floatOrb2 26s ease-in-out infinite;
+}
+
+@keyframes floatOrb1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-40px, 60px) scale(1.15); }
+}
+
+@keyframes floatOrb2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, -40px) scale(1.1); }
+}
+
+/* Extra floating particles container effect via main-content pseudo elements */
+.main-content::before,
+.main-content::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(50px);
+}
+
+.main-content::before {
+    width: 260px;
+    height: 260px;
+    top: 35%;
+    right: 8%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(99, 102, 241, 0) 70%);
+    animation: floatOrb3 18s ease-in-out infinite;
+}
+
+.main-content::after {
+    width: 200px;
+    height: 200px;
+    bottom: 10%;
+    right: 25%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.20) 0%, rgba(212, 175, 55, 0) 70%);
+    animation: floatOrb4 20s ease-in-out infinite;
+}
+
+@keyframes floatOrb3 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.7; }
+    50% { transform: translate(-30px, 40px); opacity: 1; }
+}
+
+@keyframes floatOrb4 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.6; }
+    50% { transform: translate(30px, -30px); opacity: 1; }
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    min-height: 100vh;
+    height: 100vh;
+    background: linear-gradient(165deg, rgba(184, 134, 11, 0.97) 0%, rgba(26, 37, 64, 0.97) 100%);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    padding: 35px 25px;
+    color: white;
+    box-shadow: 8px 0 40px rgba(0, 0, 0, 0.25), inset -1px 0 0 rgba(255, 255, 255, 0.08);
+    width: 70px;
+    z-index: 1000;
+    overflow: hidden;
+    overflow-y: auto;
+    transition: width 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sidebar:hover {
+    width: 250px;
+    box-shadow: 12px 0 50px rgba(0, 0, 0, 0.3), inset -1px 0 0 rgba(255, 255, 255, 0.12);
+}
+
+.sidebar:hover .logo-box,
+.sidebar:hover .filter-title {
+    opacity: 1;
+    visibility: visible;
+}
+
+.logo-box {
+    margin-bottom: 50px;
+    text-align: center;
+    padding-bottom: 25px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+    white-space: nowrap;
+}
+
+.logo-img {
+    width: 50px;
+    height: 50px;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 15px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15), 0 0 25px rgba(212, 175, 55, 0.55);
+    animation: logoGlow 4s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+    0%, 100% { box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15), 0 0 18px rgba(212, 175, 55, 0.45); }
+    50% { box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.22), 0 0 32px rgba(212, 175, 55, 0.75); }
+}
+
+.sidebar:hover .logo-img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 15px;
+}
+
+.filter-title {
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, visibility 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+    white-space: nowrap;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.filter-title i {
+    display: block;
+    font-size: 20px;
+    margin-bottom: 5px;
+    opacity: 1;
+    visibility: visible;
+    color: var(--gold-light);
+    filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+}
+
+.filter-btn {
+    width: 100%;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: left;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 50px;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.filter-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.filter-btn:hover::before {
+    transform: translateX(100%);
+}
+
+.filter-btn i {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+}
+
+.filter-btn span {
+    margin-left: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s, visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+    display: inline;
+}
+
+.sidebar:hover .filter-btn span {
+    opacity: 1;
+    visibility: visible;
+}
+
+.filter-btn:hover {
+    background: rgba(255, 255, 255, 0.97);
+    color: var(--primary-dark);
+    transform: translateX(8px) scale(1.03);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18), 0 0 18px rgba(212, 175, 55, 0.35);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.filter-btn:hover i {
+    color: var(--royal-purple);
+    transform: scale(1.15);
+}
+
+.filter-btn.active {
+    background: rgba(255, 255, 255, 0.97);
+    color: var(--primary-dark);
+    font-weight: 600;
+    border-color: var(--gold-light);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18), 0 0 16px rgba(212, 175, 55, 0.4);
+}
+
+/* MAIN CONTENT */
+
+.main-content {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+    min-height: 100vh;
+    padding: 40px;
+    background: rgba(248, 250, 252, 0.033);
+    position: relative;
+    z-index: 2;
+    transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+    animation: fadeSlideUp 0.6s ease forwards;
+}
+
+.top-header h2 {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 34px;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--royal-purple) 60%, var(--gold-deep) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.top-header p {
+    color: var(--gray);
+    margin-top: 8px;
+    font-size: 15px;
+    letter-spacing: 0.2px;
+}
+
+.service-tag {
+    background: var(--glass-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding: 12px 28px;
+    border-radius: 50px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.service-tag:hover {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.35);
+}
+
+/* STATS */
+
+.stats-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    margin-bottom: 25px;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border-left: 5px solid var(--primary);
+    position: relative;
+    overflow: hidden;
+    animation: fadeSlideUp 0.6s ease forwards, floatGentle 6s ease-in-out infinite;
+}
+
+.stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: rgba(99, 102, 241, 0.08);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+    transition: transform 0.5s ease, background 0.5s ease;
+}
+
+.stats-card:hover::before {
+    transform: translate(20%, -20%) scale(1.3);
+    background: rgba(99, 102, 241, 0.14);
+}
+
+.stats-card:hover {
+    transform: translateY(-10px) scale(1.015);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    animation-play-state: paused;
+}
+
+.stats-card.present {
+    border-left-color: var(--success);
+}
+
+.stats-card--late {
+    border-left-color: var(--warning);
+}
+
+.stats-card--absent {
+    border-left-color: var(--danger);
+}
+
+.stats-card h5 {
+    font-size: 13px;
+    color: var(--gray);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stats-card h2 {
+    margin-top: 15px;
+    font-weight: 700;
+    font-size: 44px;
+    color: var(--navy);
+    position: relative;
+    z-index: 1;
+    letter-spacing: -1px;
+}
+
+.stats-card .icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 28px;
+    opacity: 0.12;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.stats-card:hover .icon {
+    opacity: 0.22;
+    transform: scale(1.1) rotate(8deg);
+}
+
+/* SEARCH */
+
+.search-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    padding: 22px;
+    border-radius: 18px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition: all 0.35s ease;
+    animation: fadeSlideUp 0.6s ease forwards;
+    animation-delay: 0.15s;
+    position: relative;
+    z-index: 2;
+}
+
+.search-card:hover {
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
+}
+
+.form-control {
+    border-radius: 14px;
+    padding: 14px 18px;
+    border: 2px solid var(--border-light);
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.75);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15), 0 6px 18px rgba(99, 102, 241, 0.15);
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.01);
+}
+
+.btn-search {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--primary) 55%, var(--royal-purple) 100%);
+    border: none;
+    color: white;
+    border-radius: 14px;
+    padding: 14px 32px;
+    font-weight: 600;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+    background-size: 200% 200%;
+}
+
+.btn-search:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.45), 0 0 20px rgba(212, 175, 55, 0.35);
+    color: white;
+    background-position: 100% 50%;
+}
+
+.btn-search:active {
+    transform: translateY(-1px) scale(1.0);
+}
+
+/* TABLE */
+
+.table-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(22px) saturate(160%);
+    -webkit-backdrop-filter: blur(22px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    overflow: hidden;
+    animation: fadeSlideUp 0.6s ease forwards;
+    animation-delay: 0.25s;
+    position: relative;
+    z-index: 2;
+}
+
+.table {
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-responsive {
+    border-radius: 12px;
+    max-height: 70vh;
+}
+
+.table thead th {
+    border: none;
+    background: linear-gradient(135deg, #f3f0ff 0%, #fdf6e3 100%);
+    color: var(--navy);
+    padding: 18px 20px;
+    font-weight: 700;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--gold-light);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.table tbody td {
+    padding: 18px 20px;
+    vertical-align: middle;
+    border-color: var(--border-light);
+    font-size: 14px;
+    color: var(--dark);
+}
+
+.table tbody tr {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid var(--border-light);
+    animation: fadeSlideUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+.table tbody tr:nth-child(odd) {
+    background: rgba(99, 102, 241, 0.025);
+}
+
+.table tbody tr:nth-child(even) {
+    background: rgba(212, 175, 55, 0.03);
+}
+
+.table tbody tr:hover {
+    background: linear-gradient(90deg, rgba(99, 102, 241, 0.10) 0%, rgba(212, 175, 55, 0.06) 100%);
+    transform: scale(1.005);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    z-index: 1;
+    position: relative;
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* STATUS */
+
+.badge-status {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: capitalize;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+.badge-status:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.badge-status i {
+    font-size: 10px;
+}
+
+.badge-status.present {
+    background: rgba(16, 185, 129, 0.18);
+    color: var(--success);
+    box-shadow: 0 3px 10px rgba(16, 185, 129, 0.18);
+}
+
+.badge-status.late {
+    background: rgba(245, 159, 11, 0.2);
+    color: var(--warning);
+    box-shadow: 0 3px 10px rgba(245, 159, 11, 0.18);
+}
+
+.badge-status.absent {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+    box-shadow: 0 3px 10px rgba(239, 68, 68, 0.18);
+}
+
+/* AVATAR */
+
+.member {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--primary) 55%, var(--royal-purple) 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35), 0 0 0 3px rgba(212, 175, 55, 0.15);
+    flex-shrink: 0;
+    position: relative;
+    animation: avatarPulse 3.5s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+
+.member:hover .avatar {
+    transform: scale(1.08) rotate(-4deg);
+}
+
+@keyframes avatarPulse {
+    0%, 100% { box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35), 0 0 0 3px rgba(212, 175, 55, 0.15); }
+    50% { box-shadow: 0 4px 18px rgba(99, 102, 241, 0.45), 0 0 0 6px rgba(212, 175, 55, 0.08); }
+}
+
+/* ID COLUMN */
+
+.id-cell {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+/* MINISTRY BADGE */
+
+.ministry-badge {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.12) 0%, rgba(212, 175, 55, 0.12) 100%);
+    color: var(--royal-purple);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    box-shadow: 0 3px 10px rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(99, 102, 241, 0.12);
+}
+
+.ministry-badge:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.18);
+}
+
+/* GLOBAL INTERACTIVE TRANSITIONS */
+
+a, button, input, .btn, .filter-btn, .service-tag, .stats-card,
+.search-card, .table-card, .badge-status, .ministry-badge, .avatar {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 60px;
+    }
+
+    .sidebar:hover {
+        width: 250px;
+    }
+
+    .main-content {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+        padding: 25px;
+    }
+
+    .top-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .top-header h2 {
+        font-size: 24px;
+    }
+
+    .service-tag {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table-responsive {
+        font-size: 13px;
+    }
+
+    .table tbody td {
+        padding: 12px;
+    }
+
+    .stats-card h2 {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px;
+        padding: 25px 15px;
+    }
+
+    .sidebar:hover {
+        width: 220px;
+    }
+
+    .filter-btn {
+        margin-bottom: 8px;
+        padding: 12px 14px;
+    }
+
+    .main-content {
+        margin-left: 60px;
+        width: calc(100% - 60px);
+        padding: 15px;
+    }
+
+    .top-header h2 {
+        font-size: 20px;
+    }
+
+    .member {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    .table-card {
+        padding: 15px;
+    }
+
+    .table thead th {
+        padding: 12px;
+        font-size: 11px;
+    }
+
+    .table tbody td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .stats-card {
+        padding: 20px;
+    }
+
+    .stats-card h2 {
+        font-size: 28px;
+    }
+
+    .badge-status {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+
+    .service-tag {
+        font-size: 13px;
+        padding: 10px 20px;
+    }
+}
+
+/* ANIMATIONS */
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes floatGentle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes sidebarExpand {
+    from {
+        width: 70px;
+    }
+    to {
+        width: 250px;
+    }
+}
+
+.stats-card,
+.table-card,
+.search-card {
+    animation: slideIn 0.5s ease forwards;
+}
+
+.stats-card:nth-child(1) { animation-delay: 0.1s; }
+.stats-card:nth-child(2) { animation-delay: 0.2s; }
+.stats-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* Staggered fade-in for dynamically rendered table rows */
+.table tbody tr:nth-child(1)  { animation-delay: 0.03s; }
+.table tbody tr:nth-child(2)  { animation-delay: 0.06s; }
+.table tbody tr:nth-child(3)  { animation-delay: 0.09s; }
+.table tbody tr:nth-child(4)  { animation-delay: 0.12s; }
+.table tbody tr:nth-child(5)  { animation-delay: 0.15s; }
+.table tbody tr:nth-child(6)  { animation-delay: 0.18s; }
+.table tbody tr:nth-child(7)  { animation-delay: 0.21s; }
+.table tbody tr:nth-child(8)  { animation-delay: 0.24s; }
+.table tbody tr:nth-child(9)  { animation-delay: 0.27s; }
+.table tbody tr:nth-child(10) { animation-delay: 0.30s; }
+.table tbody tr:nth-child(n+11) { animation-delay: 0.32s; }
+</style>
+
+</head>
+<body>
+
+<!-- LOGO OVERLAY -->
+<div class="logo-overlay">
+    <img src="image/chr_logo.png" alt="Church Logo">
+</div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+
+            <div class="logo-box">
+                <img src="image/chr_logo.png" alt="Church Logo" class="logo-img">
+                <h3 style="display: none;"><i class="fas fa-church"></i> Church Of Pentecost</h3>
+                <p>Members Records List</p>
+            </div>
+
+            <h6 class="filter-title"><i class="fas fa-filter"></i> Filter Status</h6>
+
+            <!-- BUG 2 FIX: Added data-filter attributes to each button — without them the JS had no way to know which status to filter rows by -->
+            <button class="filter-btn active" data-filter="all">
+                <i class="fas fa-users"></i> <span>All Members</span>
+            </button>
+              <button class="filter-btn" data-filter="Pastor">
+                <i class="fas fa-users"></i> <span>Pastors</span>
+            </button>
+             <button class="filter-btn" data-filter="Elder">
+                <i class="fas fa-users"></i> <span>Elders</span>
+            </button>
+             <button class="filter-btn" data-filter="Deacon">
+                <i class="fas fa-users"></i> <span>Deacons</span>
+            </button>
+              <button class="filter-btn" data-filter="Deaconess">
+                <i class="fas fa-users"></i> <span>Deaconesses</span>
+            </button>
+              <button class="filter-btn" data-filter="Youth">
+                <i class="fas fa-users"></i> <span>Youth Ministry</span>
+            </button>
+              <button class="filter-btn" data-filter="Children Ministry">
+                <i class="fas fa-users"></i> <span>Children Ministry</span>
+            </button>
+              
+
+</nav>
+
+<!-- CONTENT -->
+<div class="main-content">
+
+            <div class="top-header">
+
+                <div>
+                    <h2>Members Record List</h2>
+                    <p>View and filter member records.</p>
+                </div>
+
+                <div class="service-tag">
+                    <i class="fas fa-calendar-check"></i> Sunday Service
+                </div>
+
+            </div>
+
+            <!-- STATS -->
+
+            <div class="stats-card">
+                <i class="fas fa-users icon"></i>
+                <h5>Total Members</h5>
+                <h2 id="stat-total">0</h2>
+            </div>
+
+            <!-- SEARCH -->
+
+            <div class="search-card">
+
+                <div class="input-group">
+
+                    <input
+                    type="text"
+                    id="search-input"
+                    class="form-control"
+                    placeholder="Search Member Name or ID...">
+
+                    <button class="btn btn-search">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+
+            <div class="table-card">
+
+                <div class="table-responsive">
+
+                    <table class="table">
+
+                        <thead>
+
+                            <tr>
+                                <th>ID</th>
+                                <th>Member</th>
+                                <th>Ministry</th>
+                                <th>Status</th>
+                                <th>Location</th>
+                                <th>Contact</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="records-tbody">
+                            <!-- Rows populated dynamically by member_records.php -->
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Auth guard — uses the real server session (sessionStorage.isLoggedIn was
+    // never set anywhere in this app, so checking it here was always false/meaningless).
+    (async function checkAuth() {
+        try {
+            const res  = await fetch('check_session.php');
+            const data = await res.json();
+            if (!data.logged_in) {
+                window.location.href = 'Login.html';
+            }
+        } catch {
+            console.warn('Auth check skipped — check_session.php not reachable.');
+        }
+    })();
+
+    let allRecords = [];
+    let currentFilter = 'all';
+    let currentSearch = '';
+
+    // Maps a member's status to a display icon/label for the badge.
+    // Falls back to a generic badge for any status not listed here.
+    const statusMeta = {
+        Pastor:        { icon: 'fa-cross',          label: 'Pastor' },
+        Deacon:        { icon: 'fa-user-tie',       label: 'Deacon' },
+        Deaconess:     { icon: 'fa-user-tie',       label: 'Deaconess' },
+        Elder:         { icon: 'fa-user-shield',    label: 'Elder' },
+        Youth:         { icon: 'fa-user',           label: 'Youth' },
+        'Youth Leader':{ icon: 'fa-user-graduate',  label: 'Youth Leader' },
+        Chairman:      { icon: 'fa-user-tie',       label: 'Chairman' },
+        'New Convert': { icon: 'fa-seedling',       label: 'New Convert' },
+        present:       { icon: 'fa-circle-check',   label: 'N/A' }
+    };
+
+    function renderTable() {
+        const tbody = document.getElementById('records-tbody');
+        tbody.innerHTML = '';
+
+        const filtered = allRecords.filter(r => {
+            const matchesFilter = currentFilter === 'all' || r.status === currentFilter;
+            const matchesSearch = currentSearch === '' ||
+                r.member_name.toLowerCase().includes(currentSearch) ||
+                String(r.member_id).toLowerCase().includes(currentSearch);
+            return matchesFilter && matchesSearch;
+        });
+
+        filtered.forEach(r => {
+            const meta = statusMeta[r.status] || statusMeta.present;
+            const initial = r.member_name.charAt(0).toUpperCase();
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span class="id-cell">${String(r.member_id).padStart(3, '0')}</span></td>
+                <td>
+                    <div class="member">
+                        <div class="avatar">${initial}</div>
+                        <span>${r.member_name}</span>
+                    </div>
+                </td>
+                <td><span class="ministry-badge">${r.ministry}</span></td>
+                <td>
+                    <span class="badge-status ${r.status}">
+                        <i class="fas ${meta.icon}"></i> ${meta.label}
+                    </span>
+                </td>
+                <td>${r.location}</td>
+                <td><span class="contact-info">${r.contact}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    async function fetchRecords() {
+        try {
+            const res = await fetch('member_records.php');
+            const data = await res.json();
+            if (data.success) {
+                allRecords = data.records;
+                document.getElementById('stat-total').textContent   = data.stats.total;
+                renderTable();
+            }
+        } catch (e) {
+            console.error('Failed to load records', e);
+        }
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            renderTable();
+        });
+    });
+
+    const searchInput = document.getElementById('search-input');
+    function applySearch() {
+        currentSearch = searchInput.value.trim().toLowerCase();
+        renderTable();
+    }
+    document.querySelector('.btn-search').addEventListener('click', applySearch);
+    searchInput.addEventListener('keyup', function (e) {
+        if (e.key === 'Enter') applySearch();
+    });
+
+    fetchRecords();
+</script>
+
+</body>
+</html>
